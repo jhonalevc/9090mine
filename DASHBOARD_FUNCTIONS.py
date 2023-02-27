@@ -10,7 +10,7 @@ from io import BytesIO
 import json
 import random
 import streamlit.components.v1 as components
-import CALCULATION_FUNCTIONS
+
 
 
 def title_centered_h3(str_):
@@ -31,6 +31,21 @@ def space():
     return st.markdown("""<br>""",unsafe_allow_html =True)
 def wide():
     return st.set_page_config(layout="wide")
+
+
+
+def get_gantt(xes_df :pd.DataFrame, id_):
+    if id != None:
+        xes_df_subset = xes_df[xes_df['case:concept:name'] == str(id_)]
+        xes_df_subset = xes_df_subset[['concept:name','time:timestamp','case:concept:name']]
+        xes_df_subset['time:timestamp']  = pd.to_datetime(xes_df_subset['time:timestamp'],utc=True)
+        new_task = []
+        for a,b in zip(xes_df_subset['concept:name'],range(len(xes_df_subset))):
+            new_task.append(a+'_'+str(b))
+        xes_df_subset['new_task'] = new_task
+        xes_df_subset['time_end'] = xes_df_subset['time:timestamp'].shift(-1)
+        return plx.timeline(xes_df_subset,x_start='time:timestamp',x_end='time_end', y ='new_task',color='new_task')
+
 
 
 class selectbox:
@@ -640,7 +655,7 @@ class timing:
                 query_df = f""" SELECT * FROM public.eventlog_df WHERE "case:concept:name" = '{select_cases}' """
                 _df_ = pd.read_sql(sql= query_df, con = connection)
 
-        gantt_chart =  CALCULATION_FUNCTIONS.Gantt_utils.get_gantt(xes_df = _df_, id_ = select_cases)
+        gantt_chart =  get_gantt(xes_df = _df_, id_ = select_cases)
         st.plotly_chart(gantt_chart, use_container_width=True)
 
     def build_variant_case_identifier(connection=""):

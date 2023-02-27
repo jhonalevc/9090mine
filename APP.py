@@ -4,7 +4,7 @@ import DASHBOARD_FUNCTIONS
 from sqlalchemy import create_engine
 
 
-engine = create_engine("postgresql://app_user9090:app_pass9090@20.169.221.14:9090/root")
+engine = create_engine("postgresql://app_user9090:app_pass9090@localhost:9090/root")
 
 
 DASHBOARD_FUNCTIONS.wide()

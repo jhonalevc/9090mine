@@ -1,5 +1,5 @@
 import pm4py
-import CALCULATION_FUNCTIONS
+import __CALCULATION_FUNCTIONS
 import pandas as pd
 from sqlalchemy import create_engine
 import psycopg2
@@ -42,34 +42,34 @@ def load_eventlog_df(xes_data_df, engine = None):
     print('eventlog_df: loaded ')
 
 def filtered_data_load(engine = None, xes_data_df = None, xes_data_= None):
-    overview_data_filter_header_info = CALCULATION_FUNCTIONS.utils_utils.get_df_overview_summary_header(eventlog_dataframe = xes_data_df,evntlog = xes_data_)
+    overview_data_filter_header_info = __CALCULATION_FUNCTIONS.utils_utils.get_df_overview_summary_header(eventlog_dataframe = xes_data_df,evntlog = xes_data_)
     overview_data_filter_header_info.to_sql(con=engine, if_exists ='replace',index = False,name='overview_header',schema ='public')
     print('Overveiw Header: Loaded')
 
 def load_variants(engine = None, xes_data_ = None):
-    varinats_info_Data_0,varinats_info_Data_1 = CALCULATION_FUNCTIONS.transformation_utils.GET_TRANSFORMED_DATA_BIG(xes_data_)
+    varinats_info_Data_0,varinats_info_Data_1 = __CALCULATION_FUNCTIONS.transformation_utils.GET_TRANSFORMED_DATA_BIG(xes_data_)
     varinats_info_Data_1.to_sql(con=engine,schema ='public',if_exists='replace',index=False,name ='variants_info')
     varinats_info_Data_0.to_sql(con=engine,schema ='public',if_exists='replace',index=False,name ='variants_info_percase')
     print('Data Variants: Loaded')
 
 def nets_sankeys(engine = None,xes_data_=None ):
-    CALCULATION_FUNCTIONS.build_progress.get_visuals(xes_eventlog = xes_data_,con=engine,schema ='public', x_height = "800px",s_height = 500, s_width = 1400  )
+    __CALCULATION_FUNCTIONS.build_progress.get_visuals(xes_eventlog = xes_data_,con=engine,schema ='public', x_height = "800px",s_height = 500, s_width = 1400  )
     print('Nets & Sankeys Created -')
 
 def BPMNs_ (engine = None, xes_data_ = None):
-    CALCULATION_FUNCTIONS.build_progress.get_BPMNs(xes_eventlog = xes_data_, con = engine)
+    __CALCULATION_FUNCTIONS.build_progress.get_BPMNs(xes_eventlog = xes_data_, con = engine)
     print('BPMNs Created')
 
 def additional_maps_(engine= None, xes_data_=None):
-    CALCULATION_FUNCTIONS.build_progress.get_additional_maps(xes_eventlog = xes_data_, con= engine )
+    __CALCULATION_FUNCTIONS.build_progress.get_additional_maps(xes_eventlog = xes_data_, con= engine )
     print('Additional Maps Created')
 
 def dfg_vis_data(engine=None, xes_data_ = None):
-    CALCULATION_FUNCTIONS.build_progress.get_visuals_DFG(xes_eventlog = xes_data_,aggregation_ ='mean',x_height = "800px",con= engine,x_width="100%")
+    __CALCULATION_FUNCTIONS.build_progress.get_visuals_DFG(xes_eventlog = xes_data_,aggregation_ ='mean',x_height = "800px",con= engine,x_width="100%")
     print('DFG_CREATED')
 
 def gantt__(engine = None, xes_data_df= None, xes_data_= None):
-    CALCULATION_FUNCTIONS.build_progress.buid_dataset_4_gantt(con= engine,dataframe= xes_data_df,xes_eventlog = xes_data_)
+    __CALCULATION_FUNCTIONS.build_progress.buid_dataset_4_gantt(con= engine,dataframe= xes_data_df,xes_eventlog = xes_data_)
     print('data_4_gantt_loaded')
 
 
