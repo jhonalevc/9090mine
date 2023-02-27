@@ -1,0 +1,129 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vis-network@latest/styles/vis-network.css" type="text/css" />
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vis-network@latest/dist/vis-network.min.js"> </script>
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 100%;
+            height: 800px;
+            background-color: #ffffff;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+
+        
+
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"id": "Start", "label": "Start", "level": 0, "shape": "box"}, {"id": "Register", "label": "Register", "level": 1, "shape": "box"}, {"id": "Analyze Defect", "label": "Analyze Defect", "level": 2, "shape": "box"}, {"id": "Repair (Complex)", "label": "Repair (Complex)", "level": 3, "shape": "box"}, {"id": "Repair (Simple)", "label": "Repair (Simple)", "level": 3, "shape": "box"}, {"id": "Restart Repair", "label": "Restart Repair", "level": 3, "shape": "box"}, {"id": "Inform User", "label": "Inform User", "level": 5, "shape": "box"}, {"id": "Test Repair", "label": "Test Repair", "level": 5, "shape": "box"}, {"id": "Archive Repair", "label": "Archive Repair", "level": 7, "shape": "box"}, {"id": "End", "label": "End", "level": 7, "shape": "box"}]);
+        edges = new vis.DataSet([{"arrows": "to", "from": "Start", "label": "1091", "to": "Register"}, {"arrows": "to", "from": "Register", "label": "1091", "to": "Analyze Defect"}, {"arrows": "to", "from": "Analyze Defect", "label": "1091", "to": "Analyze Defect"}, {"arrows": "to", "from": "Analyze Defect", "label": "522", "to": "Repair (Complex)"}, {"arrows": "to", "from": "Analyze Defect", "label": "414", "to": "Repair (Simple)"}, {"arrows": "to", "from": "Analyze Defect", "label": "155", "to": "Inform User"}, {"arrows": "to", "from": "Repair (Complex)", "label": "403", "to": "Repair (Complex)"}, {"arrows": "to", "from": "Repair (Complex)", "label": "709", "to": "Test Repair"}, {"arrows": "to", "from": "Repair (Complex)", "label": "312", "to": "Inform User"}, {"arrows": "to", "from": "Repair (Simple)", "label": "613", "to": "Repair (Simple)"}, {"arrows": "to", "from": "Repair (Simple)", "label": "769", "to": "Test Repair"}, {"arrows": "to", "from": "Repair (Simple)", "label": "156", "to": "Inform User"}, {"arrows": "to", "from": "Inform User", "label": "205", "to": "Archive Repair"}, {"arrows": "to", "from": "Inform User", "label": "63", "to": "Restart Repair"}, {"arrows": "to", "from": "Inform User", "label": "401", "to": "Repair (Complex)"}, {"arrows": "to", "from": "Inform User", "label": "219", "to": "Repair (Simple)"}, {"arrows": "to", "from": "Inform User", "label": "176", "to": "Test Repair"}, {"arrows": "to", "from": "Test Repair", "label": "1308", "to": "Test Repair"}, {"arrows": "to", "from": "Test Repair", "label": "327", "to": "Restart Repair"}, {"arrows": "to", "from": "Test Repair", "label": "789", "to": "Archive Repair"}, {"arrows": "to", "from": "Test Repair", "label": "468", "to": "Inform User"}, {"arrows": "to", "from": "Restart Repair", "label": "292", "to": "Repair (Simple)"}, {"arrows": "to", "from": "Restart Repair", "label": "98", "to": "Repair (Complex)"}, {"arrows": "to", "from": "Archive Repair", "label": "994", "to": "End"}, {"arrows": "to", "from": "Test Repair", "label": "70", "to": "End"}, {"arrows": "to", "from": "Inform User", "label": "27", "to": "End"}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "layout": {
+        "hierarchical": {
+            "blockShifting": true,
+            "edgeMinimization": true,
+            "enabled": true,
+            "levelSeparation": 150,
+            "parentCentralization": true,
+            "sortMethod": "hubsize",
+            "treeSpacing": 200
+        },
+        "improvedLayout": true,
+        "randomSeed": 0
+    },
+    "physics": {
+        "enabled": true,
+        "hierarchicalRepulsion": {
+            "centralGravity": 0.0,
+            "damping": 0.09,
+            "nodeDistance": 150,
+            "springConstant": 0,
+            "springLength": 100
+        },
+        "solver": "hierarchicalRepulsion",
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+        
+        
+
+        
+
+        network = new vis.Network(container, data, options);
+	 
+        
+
+
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>

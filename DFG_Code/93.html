@@ -1,0 +1,117 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vis-network@latest/styles/vis-network.css" type="text/css" />
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vis-network@latest/dist/vis-network.min.js"> </script>
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 100%;
+            height: 800px;
+            background-color: #ffffff;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+
+        
+
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"color": "green", "id": "Start", "label": "Start", "level": 0, "shape": "diamond", "size": 120}, {"color": "orange", "id": "Register", "label": "Register", "level": 1, "shape": "box"}, {"color": "orange", "id": "Analyze Defect", "label": "Analyze Defect", "level": 2, "shape": "box"}, {"color": "orange", "id": "Repair (Complex)", "label": "Repair (Complex)", "level": 3, "shape": "box"}, {"color": "orange", "id": "Repair (Simple)", "label": "Repair (Simple)", "level": 3, "shape": "box"}, {"color": "orange", "id": "Restart Repair", "label": "Restart Repair", "level": 3, "shape": "box"}, {"color": "orange", "id": "Test Repair", "label": "Test Repair", "level": 4, "shape": "box"}, {"color": "orange", "id": "Inform User", "label": "Inform User", "level": 4, "shape": "box"}, {"color": "orange", "id": "Archive Repair", "label": "Archive Repair", "level": 6, "shape": "box"}, {"color": "green", "id": "End", "label": "End", "level": 6, "shape": "diamond", "size": 120}]);
+        edges = new vis.DataSet([{"arrows": "to", "color": "orange", "from": "Start", "label": "-", "to": "Register"}, {"arrows": "to", "color": "orange", "from": "Register", "label": "0sec", "to": "Analyze Defect"}, {"arrows": "to", "color": "orange", "from": "Analyze Defect", "label": "7mins,34secs", "to": "Analyze Defect"}, {"arrows": "to", "color": "orange", "from": "Analyze Defect", "label": "13mins,36secs", "to": "Repair (Complex)"}, {"arrows": "to", "color": "orange", "from": "Repair (Complex)", "label": "18mins,15secs", "to": "Repair (Complex)"}, {"arrows": "to", "color": "orange", "from": "Repair (Complex)", "label": "0sec", "to": "Test Repair"}, {"arrows": "to", "color": "orange", "from": "Test Repair", "label": "7mins,24secs", "to": "Test Repair"}, {"arrows": "to", "color": "orange", "from": "Test Repair", "label": "6mins,28secs", "to": "Inform User"}, {"arrows": "to", "color": "orange", "from": "Inform User", "label": "1min,55secs", "to": "Archive Repair"}, {"arrows": "to", "color": "orange", "from": "Analyze Defect", "label": "14mins,10secs", "to": "Repair (Simple)"}, {"arrows": "to", "color": "orange", "from": "Repair (Simple)", "label": "9mins,20secs", "to": "Repair (Simple)"}, {"arrows": "to", "color": "orange", "from": "Repair (Simple)", "label": "0sec", "to": "Test Repair"}, {"arrows": "to", "color": "orange", "from": "Test Repair", "label": "7mins,29secs", "to": "Restart Repair"}, {"arrows": "to", "color": "orange", "from": "Restart Repair", "label": "0sec", "to": "Repair (Simple)"}, {"arrows": "to", "color": "orange", "from": "Repair (Simple)", "label": "7mins,1sec", "to": "Inform User"}, {"arrows": "to", "color": "orange", "from": "Inform User", "label": "5mins,36secs", "to": "Repair (Simple)"}, {"arrows": "to", "color": "orange", "from": "Test Repair", "label": "7mins,30secs", "to": "Archive Repair"}, {"arrows": "to", "color": "orange", "from": "Repair (Complex)", "label": "13mins,25secs", "to": "Inform User"}, {"arrows": "to", "color": "orange", "from": "Inform User", "label": "13mins,20secs", "to": "Repair (Complex)"}, {"arrows": "to", "color": "orange", "from": "Inform User", "label": "3mins,57secs", "to": "Test Repair"}, {"arrows": "to", "color": "orange", "from": "Analyze Defect", "label": "19mins,23secs", "to": "Inform User"}, {"arrows": "to", "color": "orange", "from": "Restart Repair", "label": "0sec", "to": "Repair (Complex)"}, {"arrows": "to", "color": "orange", "from": "Inform User", "label": "4mins,18secs", "to": "Restart Repair"}, {"arrows": "to", "color": "orange", "from": "Archive Repair", "label": "-", "to": "End"}, {"arrows": "to", "color": "orange", "from": "Test Repair", "label": "-", "to": "End"}, {"arrows": "to", "color": "orange", "from": "Inform User", "label": "-", "to": "End"}, {"arrows": "to", "color": "orange", "from": "Repair (Complex)", "label": "-", "to": "End"}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "forceAtlas2Based": {
+            "avoidOverlap": 1,
+            "centralGravity": 0,
+            "damping": 1,
+            "gravitationalConstant": -68,
+            "springConstant": 0.03,
+            "springLength": 200
+        },
+        "solver": "forceAtlas2Based",
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+        
+        
+
+        
+
+        network = new vis.Network(container, data, options);
+	 
+        
+
+
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>
